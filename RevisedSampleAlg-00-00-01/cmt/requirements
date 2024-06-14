@@ -1,0 +1,30 @@
+package SampleAlg 
+
+branches cmt src SampleAlg share
+
+use BesAIDA BesAIDA-*    External
+use BesPolicy BesPolicy-01-*
+use GaudiInterface GaudiInterface-01-* External
+
+use DstEvent     DstEvent-*    Event
+use EventModel   EventModel-*  Event
+use TrigEvent TrigEvent-* Event
+use EvtRecEvent EvtRecEvent-* Event
+use MdcRawEvent  MdcRawEvent-* Mdc
+use BesROOT      BesROOT-00-*     External
+use MdcRecEvent  MdcRecEvent-*  Mdc
+use DTagTool     DTagTool-*    Analysis
+
+use SimplePIDSvc        SimplePIDSvc-*    Utilities
+use MeasuredEcmsSvc     MeasuredEcmsSvc-* Utilities
+
+#use McDecayModeSvc  McDecayModeSvc-*  Analysis
+use ParticleID   ParticleID-*  Analysis
+use VertexFit    VertexFit-*   Analysis
+use GammaConv GammaConv-*  Analysis
+#use XBAF      XBAF-*
+use McTruth   McTruth-*         Event
+use ReconEvent   ReconEvent-*  Event
+apply_pattern component_library
+library SampleAlg *.cxx  components/*.cxx
+
