@@ -1,4 +1,4 @@
-#include "SampleAlg/JpsiToPhiEtaAlg.h"
+#include "SampleAlg/JpsiToKsKlEtaAlg.h"
 
 #include "GaudiKernel/MsgStream.h"
 #include "GaudiKernel/AlgFactory.h"
@@ -54,25 +54,26 @@ typedef HepGeom::Point3D<double> HepPoint3D;
 #include <vector>
 #include <set>
 const double mpion=0.13957018; //pi+-
-const double mkaon=0.493677; //k+-
+//const double mkaon=0.493677; //k+-
 const double mpi0=0.1349766;
 const double meta=0.547853;
 const double mep=0.95778;
-const double mphi=1.019455;
+//const double mphi=1.019455;
+const double mk0=0.497611; //ks&kl
 const double melectron=0.000510999;
 typedef std::vector<int> Vint;
 typedef std::vector<HepLorentzVector> Vp4;
 int no_evt1=0;
-JpsiToPhiEtaAlg::JpsiToPhiEtaAlg(const std::string& name, ISvcLocator* pSvcLocator):Algorithm(name,pSvcLocator){
+JpsiToKsKlEtaAlg::JpsiToKsKlEtaAlg(const std::string& name, ISvcLocator* pSvcLocator):Algorithm(name,pSvcLocator){
 	declareProperty("Ecms",            m_Ecms=4.260);
 	declareProperty("Debug",           m_debug=0);
 }
-JpsiToPhiEtaAlg::~JpsiToPhiEtaAlg(){
+JpsiToKsKlEtaAlg::~JpsiToKsKlEtaAlg(){
 }
-StatusCode JpsiToPhiEtaAlg::initialize(){
+StatusCode JpsiToKsKlEtaAlg::initialize(){
 	cout<<"test initialize () --- "<<endl; 
 	MsgStream log(msgSvc(), name());
-	log<<MSG::INFO<<"JpsiToPhiEtaAlg::initialize()"<<endreq;
+	log<<MSG::INFO<<"JpsiToKsKlEtaAlg::initialize()"<<endreq;
 	//add your code here
 	StatusCode status;
 	NTuplePtr nt1(ntupleSvc(), "FILE1/tree");
@@ -88,12 +89,12 @@ StatusCode JpsiToPhiEtaAlg::initialize(){
 			status = m_tuple1->addItem ("no_pim",    m_no_pim,0,20);
 			status = m_tuple1->addIndexedItem ("p4_pim", m_no_pim, 4, m_p4_pim);
 			status = m_tuple1->addIndexedItem ("pim_id", m_no_pim, m_pim_id);
-			status = m_tuple1->addItem ("no_kap",    m_no_kap,0,20);
-			status = m_tuple1->addIndexedItem ("p4_kap", m_no_kap, 4, m_p4_kap);
-			status = m_tuple1->addIndexedItem ("kap_id", m_no_kap, m_kap_id);
-			status = m_tuple1->addItem ("no_kam",    m_no_kam,0,20);
-			status = m_tuple1->addIndexedItem ("p4_kam", m_no_kam, 4, m_p4_kam);
-			status = m_tuple1->addIndexedItem ("kam_id", m_no_kam, m_kam_id);
+			//status = m_tuple1->addItem ("no_kap",    m_no_kap,0,20);
+			//status = m_tuple1->addIndexedItem ("p4_kap", m_no_kap, 4, m_p4_kap);
+			//status = m_tuple1->addIndexedItem ("kap_id", m_no_kap, m_kap_id);
+			//status = m_tuple1->addItem ("no_kam",    m_no_kam,0,20);
+			//status = m_tuple1->addIndexedItem ("p4_kam", m_no_kam, 4, m_p4_kam);
+			//status = m_tuple1->addIndexedItem ("kam_id", m_no_kam, m_kam_id);
 			status = m_tuple1->addItem ("no_gam",  m_no_gam,0,50);
 			status = m_tuple1->addIndexedItem ("gam_par", m_no_gam, 6,  m_gam_par);
 			status = m_tuple1->addItem ("no_pi0", m_no_pi0, 0,50);
@@ -132,15 +133,24 @@ StatusCode JpsiToPhiEtaAlg::initialize(){
 			status = m_tuple1->addIndexedItem("p4_gam2Fpi02Feta_kf",m_no_etaTO3pi0,4,m_p4_gam2Fpi02Feta_kf);
 			status = m_tuple1->addIndexedItem("p4_gam1Fpi03Feta_kf",m_no_etaTO3pi0,4,m_p4_gam1Fpi03Feta_kf);
 			status = m_tuple1->addIndexedItem("p4_gam2Fpi03Feta_kf",m_no_etaTO3pi0,4,m_p4_gam2Fpi03Feta_kf);
-			status = m_tuple1->addItem ("no_phiTOkk", m_no_phiTOkk,0,100);
-			status = m_tuple1->addIndexedItem("chis_phiTOkk",m_no_phiTOkk,m_chis_phiTOkk);
-			status = m_tuple1->addIndexedItem ("p4_kapFphi_kf", m_no_phiTOkk,4, m_p4_kapFphi_kf);
-			status = m_tuple1->addIndexedItem ("p4_kamFphi_kf", m_no_phiTOkk,4, m_p4_kamFphi_kf);
-			status = m_tuple1->addIndexedItem ("M_phiTOkk", m_no_phiTOkk, m_M_phiTOkk);
-			status = m_tuple1->addIndexedItem ("rconv", m_no_phiTOkk, m_rconv);
-			status = m_tuple1->addIndexedItem ("kapFphi_id", m_no_phiTOkk, m_kapFphi_id);
-			status = m_tuple1->addIndexedItem ("kamFphi_id", m_no_phiTOkk, m_kamFphi_id);
-			status = m_tuple1->addIndexedItem ("cos_ee", m_no_phiTOkk, m_cos_ee);
+			//status = m_tuple1->addItem ("no_phiTOkk", m_no_phiTOkk,0,100);
+			status = m_tuple1->addItem("no_ksTOpipi", m_no_ksTOpipi,0,100);
+			//status = m_tuple1->addIndexedItem("chis_phiTOkk",m_no_phiTOkk,m_chis_phiTOkk);
+			status = m_tuple1->addIndexedItem("chis_ksTOpipi", m_no_ksTOpipi, m_chis_ksTOpipi);
+			//status = m_tuple1->addIndexedItem ("p4_kapFphi_kf", m_no_phiTOkk,4, m_p4_kapFphi_kf);
+			status = m_tuple1->addIndexedItem("p4_pipFks_kf", m_no_ksTOpipi,4, m_p4_pipFks_kf);
+			//status = m_tuple1->addIndexedItem ("p4_kamFphi_kf", m_no_phiTOkk,4, m_p4_kamFphi_kf);
+            status = m_tuple1->addIndexedItem("p4_pimFks_kf", m_no_ksTOpipi,4, m_p4_pimFks_kf);			
+			//status = m_tuple1->addIndexedItem ("M_phiTOkk", m_no_phiTOkk, m_M_phiTOkk);
+			status = m_tuple1->addIndexedItem("M_ksTOpipi", m_no_ksTOpipi, m_M_ksTOpipi);
+			//status = m_tuple1->addIndexedItem ("rconv", m_no_phiTOkk, m_rconv);
+		    status = m_tuple1->addIndexedItem("rconv", m_no_ksTOpipi, m_rconv);
+			//status = m_tuple1->addIndexedItem ("kapFphi_id", m_no_phiTOkk, m_kapFphi_id);
+			status = m_tuple1->addIndexedItem("pipFks_id", m_no_ksTOpipi, m_pipFks_id);
+			//status = m_tuple1->addIndexedItem ("kamFphi_id", m_no_phiTOkk, m_kamFphi_id);
+            status = m_tuple1->addIndexedItem("pimFks_id", m_no_ksTOpipi, m_pimFks_id);
+			//status = m_tuple1->addIndexedItem ("cos_ee", m_no_phiTOkk, m_cos_ee);
+    		status = m_tuple1->addIndexedItem("cos_ee", m_no_ksTOpipi, m_cos_ee);
 
 			status = m_tuple1->addItem("indexmc", m_idxmc, 0, 100);
 			status = m_tuple1->addIndexedItem("pdgid" , m_idxmc, m_pdgid);
@@ -159,21 +169,21 @@ StatusCode JpsiToPhiEtaAlg::initialize(){
 
 }
 //******************************************************
-StatusCode JpsiToPhiEtaAlg::beginRun(){
+StatusCode JpsiToKsKlEtaAlg::beginRun(){
 	MsgStream log(msgSvc(), name());
-	log<<MSG::INFO<<"JpsiToPhiEtaAlg::beginRun()"<<endreq;
+	log<<MSG::INFO<<"JpsiToKsKlEtaAlg::beginRun()"<<endreq;
 	//add your code here
 	return StatusCode::SUCCESS;
 }
 
-StatusCode JpsiToPhiEtaAlg::execute(){
+StatusCode JpsiToKsKlEtaAlg::execute(){
 	if(m_debug){
 		no_evt1++;
 		cout<<"no_evt1="<<no_evt1<<endl;
 	}  
 	if(m_debug) cout<<"begin execute()--"<<endl;
 	MsgStream log(msgSvc(), name());
-	log<<MSG::INFO<<"JpsiToPhiEtaAlg::execute()"<<endreq;
+	log<<MSG::INFO<<"JpsiToKsKlEtaAlg::execute()"<<endreq;
 	SmartDataPtr<Event::EventHeader> eventHeader(eventSvc(),"/Event/EventHeader");
 	IMeasuredEcmsSvc* ecmsSvc;
 	StatusCode status=serviceLocator()->service("MeasuredEcmsSvc", ecmsSvc, true);
@@ -221,8 +231,8 @@ StatusCode JpsiToPhiEtaAlg::execute(){
 
 	Vint pipID; pipID.clear();
 	Vint pimID; pimID.clear();
-	Vint kapID; kapID.clear();
-	Vint kamID; kamID.clear();
+	//Vint kapID; kapID.clear();
+	//Vint kamID; kamID.clear();
 	Vint chrpID; chrpID.clear();
 	Vint chrmID; chrmID.clear();
 	for(int i=0; i<evtRecEvent->totalCharged(); i++){
@@ -243,20 +253,20 @@ StatusCode JpsiToPhiEtaAlg::execute(){
 		Gaudi::svcLocator()->service("SimplePIDSvc", m_simplePIDSvc);
 		m_simplePIDSvc->preparePID(*itTrk);
 		bool pion_pid= m_simplePIDSvc->ispion();
-		bool kaon_pid= m_simplePIDSvc->iskaon();
+		//bool kaon_pid= m_simplePIDSvc->iskaon();
 		if(pion_pid) {
 			if(chr>0) pipID.push_back(i);
 			else pimID.push_back(i); 
 		} 
-		else if(kaon_pid){
-			if(chr>0) kapID.push_back(i);
-			else kamID.push_back(i);
-		}
+		//else if(kaon_pid){
+		//	if(chr>0) kapID.push_back(i);
+		//	else kamID.push_back(i);
+		//}
 	}
 	if(m_debug){
 		cout<<"totaltrk: no_chrp="<<chrpID.size()<<"; no_chrm="<<chrmID.size()<<endl;
 		cout<<"   pions: no_pip="<<pipID.size()<<"; no_pim="<<pimID.size()<<endl;
-		cout<<"   kaons: no_kap="<<kapID.size()<<"; no_kam="<<kamID.size()<<endl;
+		//cout<<"   kaons: no_kap="<<kapID.size()<<"; no_kam="<<kamID.size()<<endl;
 	}  
 
 	int no_chrp=chrpID.size();
@@ -264,17 +274,18 @@ StatusCode JpsiToPhiEtaAlg::execute(){
 	if(no_chrp>20||no_chrm>20) return StatusCode::SUCCESS;
 	int no_pip=pipID.size();
 	int no_pim=pimID.size();
-	int no_kap=kapID.size();
-	int no_kam=kamID.size();
+	//int no_kap=kapID.size();
+	//int no_kam=kamID.size();
 
 	m_runNo = runNo;
 	m_evtNo= eventNo;
 
 	m_no_chrp=no_chrp;  m_no_chrm=no_chrm;
 	m_no_pip=no_pip;  m_no_pim=no_pim;
-	m_no_kap=no_kap;  m_no_kam=no_kam;
+	//m_no_kap=no_kap;  m_no_kam=no_kam;
 
 	//***save information for K+K-
+	/*
 	for(int i=0;i<no_kap;i++){
 		int kap_id=kapID[i];
 		if(m_debug) cout<<"kap_id="<<kap_id<<endl;
@@ -295,6 +306,7 @@ StatusCode JpsiToPhiEtaAlg::execute(){
 		for(int bb=0;bb<4;bb++) {m_p4_kam[i][bb]=p4_kam_tp[bb];}
 		m_kam_id[i]=kam_id;
 	}
+	*/
 
 	//*****save information for pi+pi-
 	for(int i=0;i<no_pip;i++){
@@ -670,7 +682,10 @@ StatusCode JpsiToPhiEtaAlg::execute(){
 	bool etaTO3pi0=false;
 	if(m_no_etaTO3pi0>0) etaTO3pi0=true;
 
+	//Ks->pi+pi-
+	
 	//phi->K+K-
+	/*
 	ss=-1;
 	for(int i=0;i<no_kap;i++){
 		int kap_id=kapID[i];
@@ -780,25 +795,26 @@ StatusCode JpsiToPhiEtaAlg::execute(){
 	if(phiTOkk||etaTOgg||etaTOpipipi0||etaTO3pi0)  m_tuple1->write();
 
 	return StatusCode::SUCCESS;
+	*/
 }//end of execute()
 //**************************************************************
-StatusCode JpsiToPhiEtaAlg::endRun(){
+StatusCode JpsiToKsKlEtaAlg::endRun(){
 	MsgStream log(msgSvc(), name());
-	log<<MSG::INFO<<"JpsiToPhiEtaAlg::endRun()"<<endreq;
+	log<<MSG::INFO<<"JpsiToKsKlEtaAlg::endRun()"<<endreq;
 	//add your code here
 	return StatusCode::SUCCESS;
 
 }
-StatusCode JpsiToPhiEtaAlg::finalize(){
+StatusCode JpsiToKsKlEtaAlg::finalize(){
 	if(m_debug)  cout<<"finalize: no_evt1="<<no_evt1<<endl;
 	MsgStream log(msgSvc(), name());
-	log<<MSG::INFO<<"JpsiToPhiEtaAlg::finalize()"<<endreq;
+	log<<MSG::INFO<<"JpsiToKsKlEtaAlg::finalize()"<<endreq;
 	//add your code here
 	return StatusCode::SUCCESS;
 }
 
 //add your code here,for chrer member-functions
-bool JpsiToPhiEtaAlg::goodTrk(EvtRecTrackIterator itTrk) {
+bool JpsiToKsKlEtaAlg::goodTrk(EvtRecTrackIterator itTrk) {
 	double VrCut      = 1.0;
 	double VzCut      = 10.0;
 	double CosThetaCut= 0.93;
@@ -834,7 +850,7 @@ bool JpsiToPhiEtaAlg::goodTrk(EvtRecTrackIterator itTrk) {
 	return true;
 }
 
-bool JpsiToPhiEtaAlg::good_gam(RecEmcShower *emcTrk,double& dang_min){
+bool JpsiToKsKlEtaAlg::good_gam(RecEmcShower *emcTrk,double& dang_min){
 
 	SmartDataPtr<EvtRecEvent> recEvt(eventSvc(), EventModel::EvtRec::EvtRecEvent);
 	SmartDataPtr<EvtRecTrackCol> recTrkCol(eventSvc(), EventModel::EvtRec::EvtRecTrackCol);
@@ -906,7 +922,7 @@ bool JpsiToPhiEtaAlg::good_gam(RecEmcShower *emcTrk,double& dang_min){
 
 	return( true );
 }
-HepLorentzVector JpsiToPhiEtaAlg::getP4(RecEmcShower* gTrk){
+HepLorentzVector JpsiToKsKlEtaAlg::getP4(RecEmcShower* gTrk){
 
 	double eraw = gTrk->energy();
 	double phi =  gTrk->phi();
@@ -917,7 +933,7 @@ HepLorentzVector JpsiToPhiEtaAlg::getP4(RecEmcShower* gTrk){
 			eraw * cos(the),
 			eraw );
 }
-void JpsiToPhiEtaAlg::savepi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_chis,HepLorentzVector& p4_pi0,HepLorentzVector& p4_pi0_1c){
+void JpsiToKsKlEtaAlg::savepi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_chis,HepLorentzVector& p4_pi0,HepLorentzVector& p4_pi0_1c){
 	double xmpi0=0.1349766;
 	pi0_chis=-100;
 	bool pi0_sta=0;
@@ -944,7 +960,7 @@ void JpsiToPhiEtaAlg::savepi0(RecEmcShower *shr1,RecEmcShower *shr2,double& pi0_
 		cout<<"pi0_m_1c = "<<p4_pi0_1c.m()<<endl;
 	}
 }
-void JpsiToPhiEtaAlg::saveeta(RecEmcShower *shr1,RecEmcShower *shr2,double& eta_chis,HepLorentzVector& p4_eta,HepLorentzVector& p4_eta_1c){
+void JpsiToKsKlEtaAlg::saveeta(RecEmcShower *shr1,RecEmcShower *shr2,double& eta_chis,HepLorentzVector& p4_eta,HepLorentzVector& p4_eta_1c){
 	double xmeta=0.547853;
 	eta_chis=-100;
 	bool eta_sta=0;
@@ -972,7 +988,7 @@ void JpsiToPhiEtaAlg::saveeta(RecEmcShower *shr1,RecEmcShower *shr2,double& eta_
 		cout<<"eta_m_1c = "<<p4_eta_1c.m()<<endl;
 	}
 }
-void JpsiToPhiEtaAlg::PID(EvtRecTrackIterator itTrk,double prob[25]){
+void JpsiToKsKlEtaAlg::PID(EvtRecTrackIterator itTrk,double prob[25]){
 	ParticleID *pid = ParticleID::instance();
 	pid->init();
 	pid->setMethod(pid->methodProbability());

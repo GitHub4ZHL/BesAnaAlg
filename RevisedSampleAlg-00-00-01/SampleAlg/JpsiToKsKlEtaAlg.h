@@ -1,5 +1,5 @@
-#ifndef JpsiToPhiEtaAlg_Header
-#define JpsiToPhiEtaAlg_Header
+#ifndef JpsiToKsKlEtaAlg_Header
+#define JpsiToKsKlEtaAlg_Header
 
 #include "GaudiKernel/Algorithm.h"
 //you can add oher necessary header files
@@ -11,10 +11,10 @@
 #include "EvtRecEvent/EvtRecEvent.h"
 #include "EvtRecEvent/EvtRecTrack.h"
 
-class JpsiToPhiEtaAlg:public Algorithm {
+class JpsiToKsKlEtaAlg:public Algorithm {
   public:
-    JpsiToPhiEtaAlg(const std::string& name, ISvcLocator* pSvcLocator);
-    ~JpsiToPhiEtaAlg();
+    JpsiToKsKlEtaAlg(const std::string& name, ISvcLocator* pSvcLocator);
+    ~JpsiToKsKlEtaAlg();
     StatusCode initialize();
     StatusCode beginRun();   
     StatusCode execute();
@@ -41,12 +41,12 @@ class JpsiToPhiEtaAlg:public Algorithm {
     NTuple::Item<int>  m_no_pim;
     NTuple::Matrix<double> m_p4_pim;
     NTuple::Array<int> m_pim_id;
-    NTuple::Item<int>  m_no_kap;
-    NTuple::Matrix<double> m_p4_kap;
-    NTuple::Array<int> m_kap_id;
-    NTuple::Item<int>  m_no_kam;
-    NTuple::Matrix<double> m_p4_kam;
-    NTuple::Array<int> m_kam_id;
+    //NTuple::Item<int>  m_no_kap;
+    //NTuple::Matrix<double> m_p4_kap;
+    //NTuple::Array<int> m_kap_id;
+    //NTuple::Item<int>  m_no_kam;
+    //NTuple::Matrix<double> m_p4_kam;
+    //NTuple::Array<int> m_kam_id;
     NTuple::Item<int>  m_no_gam;
     NTuple::Matrix<double> m_gam_par;
     NTuple::Item<int>  m_no_pi0;
@@ -85,19 +85,26 @@ class JpsiToPhiEtaAlg:public Algorithm {
     NTuple::Array<int> m_pi01Feta_id;
     NTuple::Array<int> m_pi02Feta_id;
     NTuple::Array<int> m_pi03Feta_id;
-    NTuple::Item<int>  m_no_phiTOkk;
-    NTuple::Array<double> m_chis_phiTOkk;
-    NTuple::Matrix<double> m_p4_kapFphi_kf;
-    NTuple::Matrix<double> m_p4_kamFphi_kf;
-    NTuple::Array<double> m_M_phiTOkk;
+    //NTuple::Item<int>  m_no_phiTOkk;
+	NTuple::Item<int> m_no_ksTopipi;
+    //NTuple::Array<double> m_chis_phiTOkk;
+	NTuple::Array<double> m_chis_ksTOpipi;
+    //NTuple::Matrix<double> m_p4_kapFphi_kf;
+	NTuple::Matrix<double> m_p4_pipFks_kf;
+    //NTuple::Matrix<double> m_p4_kamFphi_kf;
+	NTuple::Matrix<double> m_p4_pimFks_kf;
+    //NTuple::Array<double> m_M_phiTOkk;
+	NTuple::Array<doubke> m_M_ksTOpipi;
     NTuple::Array<double> m_rconv;
-    NTuple::Array<int> m_kapFphi_id;
-    NTuple::Array<int> m_kamFphi_id;
-    NTuple::Array<double> m_cos_ee;
+    //NTuple::Array<int> m_kapFphi_id;
+	NTuple::Array<double> m_pipFks_id;
+	//NTuple::Array<int> m_kamFphi_id;
+	NTuple::Array<int> m_pimFks_id;
+	NTuple::Array<double> m_cos_ee;
 
     //MC info. 
     NTuple::Item<int>  m_idxmc;
     NTuple::Array<int>  m_pdgid;
     NTuple::Array<int>  m_motheridx;
 };
-#endif//JpsiToPhiEtaAlg_Header
+#endif//JpsiToKsKlEtaAlg_Header
