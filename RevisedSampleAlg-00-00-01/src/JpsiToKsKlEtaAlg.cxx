@@ -229,107 +229,6 @@ StatusCode JpsiToKsKlEtaAlg::execute(){
 
 	SmartDataPtr<EvtRecTrackCol> evtRecTrkCol(eventSvc(),  EventModel::EvtRec::EvtRecTrackCol);
 
-	Vint pipID; pipID.clear();
-	Vint pimID; pimID.clear();
-	//Vint kapID; kapID.clear();
-	//Vint kamID; kamID.clear();
-	Vint chrpID; chrpID.clear();
-	Vint chrmID; chrmID.clear();
-	for(int i=0; i<evtRecEvent->totalCharged(); i++){
-		EvtRecTrackIterator itTrk=evtRecTrkCol->begin() + i;
-		bool bool_tp=goodTrk(itTrk); //select good trks:vr\vz\cos-theta
-		if(m_debug) cout<<i<<" bool_tp="<<bool_tp<<endl;
-		if(!bool_tp) continue;
-
-		//distinguish chr+ chr-
-		RecMdcTrack* mdcTrk = (*itTrk)->mdcTrack();
-		int chr = mdcTrk->charge();
-		if(m_debug) cout<<i<<" chr="<<chr<<endl;
-		if(chr>0)  chrpID.push_back(i);
-		else  chrmID.push_back(i);
-
-		//PID
-		ISimplePIDSvc*  m_simplePIDSvc;
-		Gaudi::svcLocator()->service("SimplePIDSvc", m_simplePIDSvc);
-		m_simplePIDSvc->preparePID(*itTrk);
-		bool pion_pid= m_simplePIDSvc->ispion();
-		//bool kaon_pid= m_simplePIDSvc->iskaon();
-		if(pion_pid) {
-			if(chr>0) pipID.push_back(i);
-			else pimID.push_back(i); 
-		} 
-		//else if(kaon_pid){
-		//	if(chr>0) kapID.push_back(i);
-		//	else kamID.push_back(i);
-		//}
-	}
-	if(m_debug){
-		cout<<"totaltrk: no_chrp="<<chrpID.size()<<"; no_chrm="<<chrmID.size()<<endl;
-		cout<<"   pions: no_pip="<<pipID.size()<<"; no_pim="<<pimID.size()<<endl;
-		//cout<<"   kaons: no_kap="<<kapID.size()<<"; no_kam="<<kamID.size()<<endl;
-	}  
-
-	int no_chrp=chrpID.size();
-	int no_chrm=chrmID.size();
-	if(no_chrp>20||no_chrm>20) return StatusCode::SUCCESS;
-	int no_pip=pipID.size();
-	int no_pim=pimID.size();
-	//int no_kap=kapID.size();
-	//int no_kam=kamID.size();
-
-	m_runNo = runNo;
-	m_evtNo= eventNo;
-
-	m_no_chrp=no_chrp;  m_no_chrm=no_chrm;
-	m_no_pip=no_pip;  m_no_pim=no_pim;
-	//m_no_kap=no_kap;  m_no_kam=no_kam;
-
-	//***save information for K+K-
-	/*
-	for(int i=0;i<no_kap;i++){
-		int kap_id=kapID[i];
-		if(m_debug) cout<<"kap_id="<<kap_id<<endl;
-		RecMdcKalTrack::setPidType(RecMdcKalTrack::kaon);
-		EvtRecTrackIterator itTrk_kap=evtRecTrkCol->begin() + kap_id;
-		RecMdcKalTrack* mdcKalTrk_kap = (*itTrk_kap)->mdcKalTrack();
-		HepLorentzVector p4_kap_tp=mdcKalTrk_kap->p4(mkaon);
-		for(int bb=0;bb<4;bb++) { m_p4_kap[i][bb]=p4_kap_tp[bb];}
-		m_kap_id[i]=kap_id;
-	}   
-	for(int i=0;i<no_kam;i++){
-		int kam_id=kamID[i];
-		if(m_debug) cout<<"kam_id="<<kam_id<<endl;
-		RecMdcKalTrack::setPidType(RecMdcKalTrack::kaon);
-		EvtRecTrackIterator itTrk_kam=evtRecTrkCol->begin() + kam_id;
-		RecMdcKalTrack* mdcKalTrk_kam = (*itTrk_kam)->mdcKalTrack();
-		HepLorentzVector p4_kam_tp=mdcKalTrk_kam->p4(mkaon);
-		for(int bb=0;bb<4;bb++) {m_p4_kam[i][bb]=p4_kam_tp[bb];}
-		m_kam_id[i]=kam_id;
-	}
-	*/
-
-	//*****save information for pi+pi-
-	for(int i=0;i<no_pip;i++){
-		int pip_id=pipID[i];
-		if(m_debug) cout<<"pip_id="<<pip_id<<endl;
-		RecMdcKalTrack::setPidType(RecMdcKalTrack::pion);
-		EvtRecTrackIterator itTrk_pip=evtRecTrkCol->begin() + pip_id;
-		RecMdcKalTrack* mdcKalTrk_pip = (*itTrk_pip)->mdcKalTrack();
-		HepLorentzVector p4_pip_tp=mdcKalTrk_pip->p4(mpion);
-		for(int bb=0;bb<4;bb++)  {m_p4_pip[i][bb]=p4_pip_tp[bb];}
-		m_pip_id[i]=pip_id;
-	}
-	for(int i=0;i<no_pim;i++){
-		int pim_id=pimID[i];
-		if(m_debug) cout<<"pim_id="<<pim_id<<endl;
-		RecMdcKalTrack::setPidType(RecMdcKalTrack::pion);
-		EvtRecTrackIterator itTrk_pim=evtRecTrkCol->begin() + pim_id;
-		RecMdcKalTrack* mdcKalTrk_pim = (*itTrk_pim)->mdcKalTrack();
-		HepLorentzVector p4_pim_tp=mdcKalTrk_pim->p4(mpion);
-		for(int bb=0;bb<4;bb++)  {m_p4_pim[i][bb]=p4_pim_tp[bb];}
-		m_pim_id[i]=pim_id;
-	}
-
 	//good showers
 	Vint goodGam; goodGam.clear();
 	int no_gam=0;
@@ -352,55 +251,6 @@ StatusCode JpsiToKsKlEtaAlg::execute(){
 	if(m_debug) cout<<"no_gam="<<no_gam<<endl;
 	if(no_gam>48) return StatusCode::SUCCESS;
 	m_no_gam=no_gam;
-
-	//*****pi0
-	if(m_debug) cout<<"#####pi0----"<<endl;
-	int ss=-1;
-	for(int gg=0;gg<no_gam;gg++){
-		if(m_debug) cout<<"gg="<<gg<<endl;
-		EvtRecTrackIterator itTrk_shr1=evtRecTrkCol->begin() + goodGam[gg];
-
-		double px_tp=m_gam_par[gg][0];
-		RecEmcShower* shr1 = (*itTrk_shr1)->emcShower();
-		HepLorentzVector p4_shr1 = getP4(shr1);
-		double px_shr1=p4_shr1.px();
-		double dang_min_tp=m_gam_par[gg][5];
-		if(m_debug) cout<<"px_tp="<<px_tp<<" px_shr1="<<px_shr1<<"; dang_min_tp="<<dang_min_tp<<endl;
-		if(dang_min_tp>-10&&dang_min_tp<10) continue;
-		for(int hh=gg+1;hh<no_gam;hh++){
-			if(m_debug) cout<<"hh="<<hh<<endl;
-			EvtRecTrackIterator itTrk_shr2=evtRecTrkCol->begin() + goodGam[hh];
-			double px_tp2=m_gam_par[hh][0];
-			RecEmcShower* shr2 = (*itTrk_shr2)->emcShower();
-			HepLorentzVector p4_shr2 = getP4(shr2);
-			double px_shr2=p4_shr2.px();
-			double dang_min_tp2=m_gam_par[hh][5];
-			if(m_debug) cout<<"px_tp2="<<px_tp2<<" px_shr2="<<px_shr2<<"; dang_min_tp2="<<dang_min_tp2<<endl;
-			if(dang_min_tp2>-10&&dang_min_tp2<10) continue;
-
-			HepLorentzVector p4_pi0=p4_shr1+p4_shr2;
-			double pi0_m=p4_pi0.m();
-			if(m_debug) cout<<"pi0_m="<<pi0_m<<endl;
-			if(pi0_m<0.105||pi0_m>0.160) continue;
-			else ss++;
-			if(ss>48) return StatusCode::SUCCESS;
-
-			HepLorentzVector p4_pi0_tp,p4_pi0_1c;
-			double pi0_chis=-100;
-			if(m_debug) cout<<"before savepi0: pi0_chis="<<pi0_chis<<endl;
-			savepi0(shr1,shr2,pi0_chis,p4_pi0_tp,p4_pi0_1c);
-			if(m_debug) cout<<"after savepi0: pi0_chis="<<pi0_chis<<endl;
-
-			for(int ll=0;ll<4;ll++) m_pi0_par[ss][ll]=p4_pi0_1c[ll];
-			m_pi0_par[ss][4]=pi0_m;
-			m_pi0_par[ss][5]=pi0_chis;
-			m_pi0_par[ss][6]=goodGam[gg];
-			m_pi0_par[ss][7]=goodGam[hh];
-		}
-	}
-	int no_pi0=ss+1;
-	m_no_pi0=no_pi0;
-	if(m_debug) cout<<"ss="<<ss<<endl;
 
 	//*****eta->gamma gamma
 	if(m_debug) cout<<"#####eta----"<<endl;
@@ -456,346 +306,192 @@ StatusCode JpsiToKsKlEtaAlg::execute(){
 	bool etaTOgg=false;
 	if(no_eta>0) etaTOgg=true;
 
-	//all chr+
-	for(int tt=0;tt<no_chrp;tt++){
-		EvtRecTrackIterator itTrk_tt = evtRecTrkCol->begin() + chrpID[tt];
-		RecMdcTrack* mdcTrk = (*itTrk_tt)->mdcTrack();
-		Hep3Vector p3_chrp=mdcTrk->p3();
-		for(int cc=0;cc<3;cc++) m_chrp_p3[tt][cc]=p3_chrp[cc];
-		m_chrp_id[tt]=chrpID[tt];
-		//deposit energy in EMC
-		if((*itTrk_tt)->isEmcShowerValid()){
-			RecEmcShower *emcTrk_tt = (*itTrk_tt)->emcShower();
-			double Eemc_tt=emcTrk_tt->energy();
-			m_chrp_Eemc[tt]=Eemc_tt;
-		}
-		else m_chrp_Eemc[tt]=-100;
-		//PID for chr+
-		double prob_p[25];
-		for(int aa=0;aa<25;aa++) prob_p[aa]=-100;
-		PID(itTrk_tt,prob_p);
-		for(int ll=0;ll<25;ll++)  m_chrp_prob[tt][ll]=prob_p[ll];
-	}
-	//all chr-
-	for(int tt=0;tt<no_chrm;tt++){
-		EvtRecTrackIterator itTrk_tt = evtRecTrkCol->begin() + chrmID[tt];
-		RecMdcTrack* mdcTrk = (*itTrk_tt)->mdcTrack();
-		Hep3Vector p3_chrm=mdcTrk->p3();
-		for(int cc=0;cc<3;cc++) m_chrm_p3[tt][cc]=p3_chrm[cc];
-		m_chrm_id[tt]=chrmID[tt];
-		//deposit energy in EMC
-		if((*itTrk_tt)->isEmcShowerValid()){
-			RecEmcShower *emcTrk_tt = (*itTrk_tt)->emcShower();
-			double Eemc_tt=emcTrk_tt->energy();
-			m_chrm_Eemc[tt]=Eemc_tt;
-		}
-		else m_chrm_Eemc[tt]=-100;
-		//PID for chr-
-		double prob_m[25];
-		for(int aa=0;aa<25;aa++) prob_m[aa]=-100;
-		PID(itTrk_tt,prob_m);
-		for(int ll=0;ll<25;ll++)  m_chrm_prob[tt][ll]=prob_m[ll];
-	}
-
-
-	//eta->pi+pi-pi0
-	ss=-1;
-	for(int i=0;i<no_pip;i++){
-		int pip_id=pipID[i];
-		if(m_debug) cout<<"pip_id="<<pip_id<<endl;
-		RecMdcKalTrack::setPidType(RecMdcKalTrack::pion);
-		EvtRecTrackIterator itTrk_pip=evtRecTrkCol->begin() + pip_id;
-		RecMdcKalTrack* mdcKalTrk_pip = (*itTrk_pip)->mdcKalTrack();
-		HepLorentzVector p4_pip_tp=mdcKalTrk_pip->p4(mpion);
-		WTrackParameter wvpipFeta;
-		wvpipFeta=WTrackParameter(mpion, mdcKalTrk_pip->getZHelix(), mdcKalTrk_pip->getZError());
-
-		for(int j=0;j<no_pim;j++){
-			int pim_id=pimID[j];
-			if(m_debug) cout<<"pim_id="<<pim_id<<endl;
-			RecMdcKalTrack::setPidType(RecMdcKalTrack::pion);
-			EvtRecTrackIterator itTrk_pim=evtRecTrkCol->begin() + pim_id;
-			RecMdcKalTrack* mdcKalTrk_pim = (*itTrk_pim)->mdcKalTrack();
-			HepLorentzVector p4_pim_tp=mdcKalTrk_pim->p4(mpion);
-			WTrackParameter wvpimFeta;
-			wvpimFeta=WTrackParameter(mpion, mdcKalTrk_pim->getZHelix(), mdcKalTrk_pim->getZError());
-
-			for(int k=0;k<no_pi0;k++){
-				HepLorentzVector p4_pi0_tp;
-				for(int ll=0;ll<4;ll++) p4_pi0_tp[ll]=m_pi0_par[k][ll];
-
-				HepLorentzVector p4_etaTOpipipi0=p4_pip_tp+p4_pim_tp+p4_pi0_tp;
-				double m_etaTOpipipi0_tp=p4_etaTOpipipi0.m();
-				if(m_debug) cout<<"m_etaTOpipipi0_tp="<<m_etaTOpipipi0_tp<<endl;
-				if(m_etaTOpipipi0_tp>0.48&&m_etaTOpipipi0_tp<0.59) {
-					ss++;
-					if(ss>48) return StatusCode::SUCCESS;
-					m_M_etaTOpipipi0[ss]=m_etaTOpipipi0_tp;  
-					m_pipFeta_id[ss]=i;
-					m_pimFeta_id[ss]=j;				      
-					m_pi0Feta_id[ss]=k;
-					if(m_debug) cout<<"ss="<<ss<<endl;
-				}
-				else continue;
-
-				int gam1Fpi0_id=m_pi0_par[k][6];
-				int gam2Fpi0_id=m_pi0_par[k][7];
-				EvtRecTrackIterator itTrk_shower1=evtRecTrkCol->begin() + gam1Fpi0_id;
-				RecEmcShower* shower1 = (*itTrk_shower1)->emcShower();
-				EvtRecTrackIterator itTrk_shower2=evtRecTrkCol->begin() + gam2Fpi0_id;
-				RecEmcShower* shower2 = (*itTrk_shower2)->emcShower();
-
-				//kinematic fit for eta->pi+pi-pi0
-				KalmanKinematicFit * kmfit_eta = KalmanKinematicFit::instance();
-				kmfit_eta->init();
-				kmfit_eta->setChisqCut(2500);
-				kmfit_eta->AddTrack(0, wvpipFeta);
-				kmfit_eta->AddTrack(1, wvpimFeta);
-				kmfit_eta->AddTrack(2, 0.0, shower1);
-				kmfit_eta->AddTrack(3, 0.0, shower2);
-				kmfit_eta->AddResonance(0, mpi0, 2,3);
-				kmfit_eta->AddResonance(1, meta, 0,1,2,3);
-				kmfit_eta->Fit();
-				double chis_eta = kmfit_eta->chisq();
-				if(m_debug) cout<<"chis_eta="<<chis_eta<<endl;
-				m_chis_etaTOpipipi0[ss]=chis_eta;
-
-				HepLorentzVector p4_pipFeta_kf=kmfit_eta->pfit(0);
-				HepLorentzVector p4_pimFeta_kf=kmfit_eta->pfit(1);
-				HepLorentzVector p4_gam1Feta_kf=kmfit_eta->pfit(2);
-				HepLorentzVector p4_gam2Feta_kf=kmfit_eta->pfit(3);
-				for(int xx=0;xx<4;xx++) { 
-					m_p4_pipFeta_kf[ss][xx]=p4_pipFeta_kf[xx];
-					m_p4_pimFeta_kf[ss][xx]=p4_pimFeta_kf[xx];
-					m_p4_gam1Feta_kf[ss][xx]=p4_gam1Feta_kf[xx];
-					m_p4_gam2Feta_kf[ss][xx]=p4_gam2Feta_kf[xx];
-				}
-				HepLorentzVector p4_etaTOpipipi0_kf=p4_pipFeta_kf+p4_pimFeta_kf+p4_gam1Feta_kf+p4_gam2Feta_kf;
-				double m_eta_1c=p4_etaTOpipipi0_kf.m();
-				if(m_debug) cout<<"eta->pipipi0: m_eta_1c="<<m_eta_1c<<endl;
-			}
-		}
-	}
-	m_no_etaTOpipipi0=ss+1;
-	bool etaTOpipipi0=false;
-	if(m_no_etaTOpipipi0>0) etaTOpipipi0=true;
-
-	//eta->3pi0
-	int mm=-1;
-	for(int i=0;i<no_pi0;i++){
-		for(int j=i+1;j<no_pi0;j++){
-			for(int k=j+1;k<no_pi0;k++){
-				HepLorentzVector p4_pi0_1,p4_pi0_2,p4_pi0_3;
-				for(int ll=0;ll<4;ll++){
-					p4_pi0_1[ll]=m_pi0_par[i][ll];
-					p4_pi0_2[ll]=m_pi0_par[j][ll];
-					p4_pi0_3[ll]=m_pi0_par[k][ll];
-				}	
-				//ensure not the same gammas
-				int gam1_Fpi01=m_pi0_par[i][6]; 
-				int gam2_Fpi01=m_pi0_par[i][7]; 
-				if(m_debug) cout<<"gam1_Fpi01="<<gam1_Fpi01<<" gam2_Fpi01="<<gam2_Fpi01<<endl;
-				int gam1_Fpi02=m_pi0_par[j][6]; 
-				int gam2_Fpi02=m_pi0_par[j][7];
-				if(m_debug) cout<<"gam1_Fpi02="<<gam1_Fpi02<<" gam2_Fpi02="<<gam2_Fpi02<<endl;
-				int gam1_Fpi03=m_pi0_par[k][6]; 
-				int gam2_Fpi03=m_pi0_par[k][7];
-				if(m_debug) cout<<"gam1_Fpi03="<<gam1_Fpi03<<" gam2_Fpi03="<<gam2_Fpi03<<endl;
-
-				if((gam1_Fpi01==gam1_Fpi02)||(gam1_Fpi01==gam2_Fpi02)||(gam1_Fpi01==gam1_Fpi03)||(gam1_Fpi01==gam2_Fpi03)) continue;
-				if((gam2_Fpi01==gam1_Fpi02)||(gam2_Fpi01==gam2_Fpi02)||(gam2_Fpi01==gam1_Fpi03)||(gam2_Fpi01==gam2_Fpi03)) continue;
-				if((gam1_Fpi02==gam1_Fpi01)||(gam1_Fpi02==gam2_Fpi01)||(gam1_Fpi02==gam1_Fpi03)||(gam1_Fpi02==gam2_Fpi03)) continue;
-				if((gam2_Fpi02==gam1_Fpi01)||(gam2_Fpi02==gam2_Fpi01)||(gam2_Fpi02==gam1_Fpi03)||(gam2_Fpi02==gam2_Fpi03)) continue;
-				if((gam1_Fpi03==gam1_Fpi01)||(gam1_Fpi03==gam2_Fpi01)||(gam1_Fpi03==gam1_Fpi02)||(gam1_Fpi03==gam2_Fpi02)) continue;
-				if((gam2_Fpi03==gam1_Fpi01)||(gam2_Fpi03==gam2_Fpi01)||(gam2_Fpi03==gam1_Fpi02)||(gam2_Fpi03==gam2_Fpi02)) continue;
-
-				HepLorentzVector p4_etaTO3pi0=p4_pi0_1+p4_pi0_2+p4_pi0_3;
-				double m_etaTO3pi0_tp=p4_etaTO3pi0.m();
-				if(m_debug) cout<<"m_etaTO3pi0_tp="<<m_etaTO3pi0_tp<<endl;
-				if(m_etaTO3pi0_tp>0.48&&m_etaTO3pi0_tp<0.59) {
-					mm++;
-					if(mm>48) return StatusCode::SUCCESS;
-					m_M_etaTO3pi0[mm]=m_etaTO3pi0_tp;
-					m_pi01Feta_id[mm]=i;
-					m_pi02Feta_id[mm]=j;
-					m_pi03Feta_id[mm]=k;
-					if(m_debug) cout<<"mm="<<mm<<endl;
-				}
-				else continue;
-
-				//kinematic fit for eta->3pi0
-				EvtRecTrackIterator itTrk_shower1_Fpi01=evtRecTrkCol->begin() + gam1_Fpi01;
-				RecEmcShower* shower1_Fpi01 = (*itTrk_shower1_Fpi01)->emcShower();
-				EvtRecTrackIterator itTrk_shower2_Fpi01=evtRecTrkCol->begin() + gam2_Fpi01;
-				RecEmcShower* shower2_Fpi01 = (*itTrk_shower2_Fpi01)->emcShower();
-
-				EvtRecTrackIterator itTrk_shower1_Fpi02=evtRecTrkCol->begin() + gam1_Fpi02;
-				RecEmcShower* shower1_Fpi02 = (*itTrk_shower1_Fpi02)->emcShower();
-				EvtRecTrackIterator itTrk_shower2_Fpi02=evtRecTrkCol->begin() + gam2_Fpi02;
-				RecEmcShower* shower2_Fpi02 = (*itTrk_shower2_Fpi02)->emcShower();
-
-				EvtRecTrackIterator itTrk_shower1_Fpi03=evtRecTrkCol->begin() + gam1_Fpi03;
-				RecEmcShower* shower1_Fpi03 = (*itTrk_shower1_Fpi03)->emcShower();
-				EvtRecTrackIterator itTrk_shower2_Fpi03=evtRecTrkCol->begin() + gam2_Fpi03;
-				RecEmcShower* shower2_Fpi03 = (*itTrk_shower2_Fpi03)->emcShower();
-
-				KalmanKinematicFit * kmfit_etaTO3pi0 = KalmanKinematicFit::instance();
-				kmfit_etaTO3pi0->init();
-				kmfit_etaTO3pi0->setChisqCut(2500);
-				kmfit_etaTO3pi0->AddTrack(0, 0.0, shower1_Fpi01);
-				kmfit_etaTO3pi0->AddTrack(1, 0.0, shower2_Fpi01);
-				kmfit_etaTO3pi0->AddTrack(2, 0.0, shower1_Fpi02);
-				kmfit_etaTO3pi0->AddTrack(3, 0.0, shower2_Fpi02);
-				kmfit_etaTO3pi0->AddTrack(4, 0.0, shower1_Fpi03);
-				kmfit_etaTO3pi0->AddTrack(5, 0.0, shower2_Fpi03);
-				kmfit_etaTO3pi0->AddResonance(0, mpi0, 0,1);
-				kmfit_etaTO3pi0->AddResonance(1, mpi0, 2,3);
-				kmfit_etaTO3pi0->AddResonance(2, mpi0, 4,5);
-				kmfit_etaTO3pi0->AddResonance(3, meta, 0,1,2,3,4,5);
-				kmfit_etaTO3pi0->Fit();
-				double chis_eta = kmfit_etaTO3pi0->chisq();
-				if(m_debug) cout<<"chis_eta="<<chis_eta<<endl;
-				m_chis_etaTO3pi0[mm]=chis_eta;
-
-				HepLorentzVector p4_gam1Fpi01Feta_kf=kmfit_etaTO3pi0->pfit(0);
-				HepLorentzVector p4_gam2Fpi01Feta_kf=kmfit_etaTO3pi0->pfit(1);
-				HepLorentzVector p4_gam1Fpi02Feta_kf=kmfit_etaTO3pi0->pfit(2);
-				HepLorentzVector p4_gam2Fpi02Feta_kf=kmfit_etaTO3pi0->pfit(3);
-				HepLorentzVector p4_gam1Fpi03Feta_kf=kmfit_etaTO3pi0->pfit(4);
-				HepLorentzVector p4_gam2Fpi03Feta_kf=kmfit_etaTO3pi0->pfit(5);
-
-				for(int xx=0;xx<4;xx++) {
-					m_p4_gam1Fpi01Feta_kf[mm][xx]=p4_gam1Fpi01Feta_kf[xx];
-					m_p4_gam2Fpi01Feta_kf[mm][xx]=p4_gam2Fpi01Feta_kf[xx];
-					m_p4_gam1Fpi02Feta_kf[mm][xx]=p4_gam1Fpi02Feta_kf[xx];
-					m_p4_gam2Fpi02Feta_kf[mm][xx]=p4_gam2Fpi02Feta_kf[xx];
-					m_p4_gam1Fpi03Feta_kf[mm][xx]=p4_gam1Fpi03Feta_kf[xx];
-					m_p4_gam2Fpi03Feta_kf[mm][xx]=p4_gam2Fpi03Feta_kf[xx];
-				}
-				HepLorentzVector p4_etaTO3pi0_kf=p4_gam1Fpi01Feta_kf+p4_gam2Fpi01Feta_kf+p4_gam1Fpi02Feta_kf+p4_gam2Fpi02Feta_kf+p4_gam1Fpi03Feta_kf+p4_gam2Fpi03Feta_kf;
-				double m_eta_1c=p4_etaTO3pi0_kf.m();
-				if(m_debug) cout<<"eta->3pi0: m_eta_1c="<<m_eta_1c<<endl;
-			}
-		}
-	}
-	m_no_etaTO3pi0=mm+1;
-	bool etaTO3pi0=false;
-	if(m_no_etaTO3pi0>0) etaTO3pi0=true;
-
 	//Ks->pi+pi-
-	
-	//phi->K+K-
-	/*
-	ss=-1;
-	for(int i=0;i<no_kap;i++){
-		int kap_id=kapID[i];
-		if(m_debug) cout<<"kap_id="<<kap_id<<endl;
-		RecMdcKalTrack::setPidType(RecMdcKalTrack::kaon);
-		EvtRecTrackIterator itTrk_kap=evtRecTrkCol->begin() + kap_id;
-		RecMdcKalTrack* mdcKalTrk_kap = (*itTrk_kap)->mdcKalTrack();
-		HepLorentzVector p4_kap_tp=mdcKalTrk_kap->p4(mkaon);
-		WTrackParameter wvkapFphi;
-		wvkapFphi=WTrackParameter(mkaon, mdcKalTrk_kap->getZHelixK(), mdcKalTrk_kap->getZErrorK());
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //// Reconstruction of KS0 -> pi+ pi- with vertex fit
 
-		for(int j=0;j<no_kam;j++){
-			int kam_id=kamID[j];
-			if(m_debug) cout<<"kam_id="<<kam_id<<endl;
-			RecMdcKalTrack::setPidType(RecMdcKalTrack::kaon);
-			EvtRecTrackIterator itTrk_kam=evtRecTrkCol->begin() + kam_id;
-			RecMdcKalTrack* mdcKalTrk_kam = (*itTrk_kam)->mdcKalTrack();
+    //nGood loop for Without PID and All tracks are considered as pion
+    Vint IdTrp; IdTrp.clear();
+    Vint IdTrm; IdTrm.clear();
+    Vp4 p4Trp; p4Trp.clear();
+    Vp4 p4Trm; p4Trm.clear();
+    for(int i = 0; i < evtRecEvent->totalCharged(); i++) {
 
-			HepLorentzVector p4_kam_tp=mdcKalTrk_kam->p4(mkaon);
-			WTrackParameter wvkamFphi;
-			wvkamFphi=WTrackParameter(mkaon, mdcKalTrk_kam->getZHelixK(), mdcKalTrk_kam->getZErrorK());
+        EvtRecTrackIterator itTrk = evtRecTrkCol->begin()+i;
+        if(!(*itTrk)->isMdcTrackValid()) continue;
+        if(!(*itTrk)->isMdcKalTrackValid()) continue;
 
-			HepLorentzVector p4_phiTOkk=p4_kap_tp+p4_kam_tp;
-			double m_phiTOkk_tp=p4_phiTOkk.m();
-			if(m_debug) cout<<"m_phiTOkk_tp="<<m_phiTOkk_tp<<endl;
+        RecMdcTrack *mdcTrk = (*itTrk)->mdcTrack();
 
-			//Rxy of K+K-
-			RecMdcKalTrack::setPidType(RecMdcKalTrack::electron);
-			EvtRecTrackIterator itTrk_ep=evtRecTrkCol->begin() + kap_id;
-			RecMdcKalTrack* mdcKalTrk_ep = (*itTrk_ep)->mdcKalTrack();
-			RecMdcKalTrack::setPidType(RecMdcKalTrack::electron);
-			EvtRecTrackIterator itTrk_em=evtRecTrkCol->begin() + kam_id;
-			RecMdcKalTrack* mdcKalTrk_em = (*itTrk_em)->mdcKalTrack();
+        HepVector a = mdcTrk->helix();
+        HepSymMatrix Ea = mdcTrk->err();
+        HepPoint3D point0(0.,0.,0.);
+        HepPoint3D IP(xorigin[0],xorigin[1],xorigin[2]);
+        VFHelix helixip(point0,a,Ea);
+        helixip.pivot(IP);
+        HepVector vecipa = helixip.a();
+        double  Rvxy0=fabs(vecipa[0]); // Vr in xy plane
+        double  Rvz0=vecipa[3]; // Vz
 
-			Hep3Vector xorigin(0,0,0);
-			IVertexDbSvc*  vtxsvc;
-			Gaudi::svcLocator()->service("VertexDbSvc", vtxsvc);
-			if(vtxsvc->isVertexValid()){
-				double* dbv = vtxsvc->PrimaryVertex();
-				xorigin.setX(dbv[0]);
-				xorigin.setY(dbv[1]);
-				xorigin.setZ(dbv[2]);
-			}
-			HepPoint3D IP(xorigin[0],xorigin[1],xorigin[2]);
-			GammaConv gconv = GammaConv(mdcKalTrk_ep->helix(), mdcKalTrk_em->helix(),IP);
-			double rconv = gconv.getRXY1();
-			if(m_debug) cout<<"rconv="<<rconv<<endl;
+        double cost = cos(mdcTrk->theta());
+        double    p = mdcTrk->p();
+        double   pt = mdcTrk->pxy();
+        double chi2 = mdcTrk->chi2(); // used for test
+        int    ndof = mdcTrk->ndof(); // used for test
 
-			HepLorentzVector p4_ep=mdcKalTrk_ep->p4(melectron);
-			HepLorentzVector p4_em=mdcKalTrk_em->p4(melectron);
+        //--> cuts for track selection
+        if(fabs(Rvz0) >= 20) continue;
+        if(fabs(cost) >= m_cosThetacut) continue;
 
-			Hep3Vector p3_ep=p4_ep.v();
-			Hep3Vector p3_em=p4_em.v();
-			double ang_ee=p3_ep.angle(p3_em);
-			double cos_ee=cos(ang_ee);
+        RecMdcKalTrack* mdcKalTrk = (*itTrk)->mdcKalTrack();
+        RecMdcKalTrack::setPidType(RecMdcKalTrack::pion);
+        HepLorentzVector p4 = mdcKalTrk->p4(mpi);
 
-			//end Rxy
-			if(m_phiTOkk_tp>0.98&&m_phiTOkk_tp<1.06) {
-				ss++;
-				if(ss>98) return StatusCode::SUCCESS;
-				m_rconv[ss]=rconv;
-				m_M_phiTOkk[ss]=m_phiTOkk_tp;  
-				m_kapFphi_id[ss]=i;
-				m_kamFphi_id[ss]=j;		
-				m_cos_ee[ss]=cos_ee;
-				if(m_debug) cout<<"ss="<<ss<<endl;
-			}
-			else continue;
-			//kinematic fit for phi->K+K-
-			KalmanKinematicFit * kmfit_phi = KalmanKinematicFit::instance();
-			kmfit_phi->init();
-			kmfit_phi->setChisqCut(2500);
-			kmfit_phi->AddTrack(0, wvkapFphi);
-			kmfit_phi->AddTrack(1, wvkamFphi);
-			kmfit_phi->AddResonance(0, mphi, 0,1);
-			kmfit_phi->Fit();
-			double chis_phi = kmfit_phi->chisq();
-			if(m_debug) cout<<"chis_phi="<<chis_phi<<endl;
-			m_chis_phiTOkk[ss]=chis_phi;
+        if(mdcTrk->charge()==1) {
+            IdTrp.push_back(i);
+            p4Trp.push_back(p4);
+        }
+        else if(mdcTrk->charge()==-1) {
+            IdTrm.push_back(i);
+            p4Trm.push_back(p4);
+        }
+    }
+    int NumTrp = IdTrp.size();
+    int NumTrm = IdTrm.size();
+    //cout << NumTrp << "   " << NumTrm << endl;
 
-			HepLorentzVector p4_kapFphi_kf=kmfit_phi->pfit(0);
-			HepLorentzVector p4_kamFphi_kf=kmfit_phi->pfit(1);
+    int NumKS0 = 0;
+    Vint IDTrp; IDTrp.clear();
+    Vint IDTrm; IDTrm.clear();
+    Vp4 P4Trp; P4Trp.clear();
+    Vp4 P4Trm; P4Trm.clear();
+    Vp4 P4KS0; P4KS0.clear();
+    Vdb Chi2KS0IP; Chi2KS0IP.clear();
+    Vdb Chi2KS0SP; Chi2KS0SP.clear();
+    Vdb LIFEKS0; LIFEKS0.clear();
+    Vdb LENKS0; LENKS0.clear();
+    Vdb LENERRKS0; LENERRKS0.clear();
+    if(NumTrp > 0 && NumTrm > 0) {
+        for(int ia = 0; ia < NumTrp; ia++) {
 
-			if(m_debug) cout<<"p4_kapFphi_kf.px()="<<p4_kapFphi_kf.px()<<endl;
+            RecMdcKalTrack *pip1Trk = (*(evtRecTrkCol->begin()+IdTrp[ia]))->mdcKalTrack();
+            pip1Trk->setPidType(RecMdcKalTrack::pion);
+            WTrackParameter wvpip1Trk = WTrackParameter(mpi, pip1Trk->getZHelix(), pip1Trk->getZError());
 
-			for(int xx=0;xx<4;xx++) {
-				m_p4_kapFphi_kf[ss][xx]=p4_kapFphi_kf[xx];
-				m_p4_kamFphi_kf[ss][xx]=p4_kamFphi_kf[xx];
-			}
-			HepLorentzVector p4_phiTOkk_kf=p4_kapFphi_kf+p4_kamFphi_kf;
-			double m_phi_1c=p4_phiTOkk_kf.m();
-			if(m_debug) cout<<"m_phi_1c="<<m_phi_1c<<endl;
+            for(int ib = 0; ib < NumTrm; ib++) {
 
-		}
-	}
-	m_no_phiTOkk=ss+1;
-	bool phiTOkk=false;
-	if(m_no_phiTOkk>0) phiTOkk=true;
+                RecMdcKalTrack *pim1Trk = (*(evtRecTrkCol->begin()+IdTrm[ib]))->mdcKalTrack();
+                pim1Trk->setPidType(RecMdcKalTrack::pion);
+                WTrackParameter wvpim1Trk = WTrackParameter(mpi, pim1Trk->getZHelix(), pim1Trk->getZError());
 
-	if(m_debug) {
-		cout<<"etaTOgg:"<<etaTOgg<<endl;
-		cout<<"etaTOpipipi0:"<<etaTOpipipi0<<endl;
-		cout<<"etaTO3pi0:"<<etaTO3pi0<<endl;
-		cout<<"phiTOkk:"<<phiTOkk<<endl;
-	} 
+                Hep3Vector ip(0,0,0);
+                HepSymMatrix ipEx(3,0);
+                IVertexDbSvc* vtxsvc;
+                Gaudi::svcLocator()->service("VertexDbSvc", vtxsvc);
+                if (vtxsvc->isVertexValid()) {
+                    double* dbv = vtxsvc->PrimaryVertex();
+                    double* vv  = vtxsvc->SigmaPrimaryVertex();
+                    ip.setX(dbv[0]);
+                    ip.setY(dbv[1]);
+                    ip.setZ(dbv[2]);
+                    ipEx[0][0] = vv[0] * vv[0];
+                    ipEx[1][1] = vv[1] * vv[1];
+                    ipEx[2][2] = vv[2] * vv[2];
+                }
+                else return StatusCode::SUCCESS; // if cannot load vertex information, will go to another event
 
-	if(phiTOkk||etaTOgg||etaTOpipipi0||etaTO3pi0)  m_tuple1->write();
+                VertexParameter bs;
+                bs.setVx(ip);
+                bs.setEvx(ipEx);
+                ///////////////////////////////////////////////////////////////////
+                //  set a common vertex with huge error
+                ///////////////////////////////////////////////////////////////////
+                HepPoint3D    vx(0., 0., 0.);
+                HepSymMatrix  Evx(3, 0);
+                double bx = 1E+6;
+                double by = 1E+6;
+                double bz = 1E+6;
+                Evx[0][0] = bx * bx;
+                Evx[1][1] = by * by;
+                Evx[2][2] = bz * bz;
+                VertexParameter vxpar;
+                vxpar.setVx(vx);
+                vxpar.setEvx(Evx);
+                ///////////////////////////////////////////////////////////////////
+                //  do vertex fit
+                ///////////////////////////////////////////////////////////////////
+                VertexFit *vtxfit = VertexFit::instance();
+                vtxfit->init();
+                vtxfit->AddTrack(0, wvpip1Trk);
+                vtxfit->AddTrack(1, wvpim1Trk);
+                vtxfit->AddVertex(0, vxpar, 0, 1);
+                if (!(vtxfit->Fit(0))) continue;
+                vtxfit->Swim(0);
+                vtxfit->BuildVirtualParticle(0);
+                double vtx_chisq = vtxfit->chisq(0);
+                ///////////////////////////////////////////////////////////////////
+                //  do second vertex fit
+                ///////////////////////////////////////////////////////////////////
+                SecondVertexFit *svtxfit = SecondVertexFit::instance();
+                svtxfit->init();
+                svtxfit->setPrimaryVertex(bs);
+                svtxfit->AddTrack(0, vtxfit->wVirtualTrack(0));
+                svtxfit->setVpar(vtxfit->vpar(0));
+                if (!svtxfit->Fit()) continue;
+                double svtx_chisq = svtxfit->chisq();
+                wvpip1Trk = vtxfit->wtrk(0);
+                wvpim1Trk = vtxfit->wtrk(1);
+                HepLorentzVector pKs = svtxfit->p4par();
+                HepVector vtxKs = svtxfit->vpar().Vx();
+                double ctau = svtxfit->ctau();
+                double len = svtxfit->decayLength();
+                double lenerr = svtxfit->decayLengthError();
+                HepLorentzVector p4pip = vtxfit->pfit(0);
+                HepLorentzVector p4pim = vtxfit->pfit(1);
+                NumKS0 = NumKS0 + 1;
 
-	return StatusCode::SUCCESS;
-	*/
+                IDTrp.push_back(ia);
+                IDTrm.push_back(ib);
+                P4Trp.push_back(p4pip);
+                P4Trm.push_back(p4pim);
+                P4KS0.push_back(pKs);
+                Chi2KS0IP.push_back(vtx_chisq);
+                Chi2KS0SP.push_back(svtx_chisq);
+                LIFEKS0.push_back(ctau);
+                LENKS0.push_back(len);
+                LENERRKS0.push_back(lenerr);
+            }
+        }
+    }
+    m_nKS0 = NumKS0;
+    //cout << "NumKS0 = " << NumKS0 << endl;
+
+    for(int i = 0; i < NumKS0; i++) {
+        m_chi2KS0IP[i] = Chi2KS0IP[i];
+        m_chi2KS0SP[i] = Chi2KS0SP[i];
+        m_LifeKS0[i] = LIFEKS0[i];
+        m_LenKS0[i] = LENKS0[i];
+        m_LenErrKS0[i] = LENERRKS0[i];
+
+        m_pxKS0[i] = P4KS0[i][0];
+        m_pyKS0[i] = P4KS0[i][1];
+        m_pzKS0[i] = P4KS0[i][2];
+        m_EKS0[i] = P4KS0[i][3];
+        m_mKS0[i] = sqrt(abs(P4KS0[i][3]*P4KS0[i][3]-P4KS0[i][0]*P4KS0[i][0]-P4KS0[i][1]*P4KS0[i][1]-P4KS0[i][2]*P4KS0[i][2]));
+
+        m_IdTrp[i] = IDTrp[i];
+        m_pxTrp[i] = P4Trp[i][0];
+        m_pyTrp[i] = P4Trp[i][1];
+        m_pzTrp[i] = P4Trp[i][2];
+        m_ETrp[i] = P4Trp[i][3];
+
+        m_IdTrm[i] = IDTrm[i];
+        m_pxTrm[i] = P4Trm[i][0];
+        m_pyTrm[i] = P4Trm[i][1];
+        m_pzTrm[i] = P4Trm[i][2];
+        m_ETrm[i] = P4Trm[i][3];
+    }
+
 }//end of execute()
 //**************************************************************
 StatusCode JpsiToKsKlEtaAlg::endRun(){
