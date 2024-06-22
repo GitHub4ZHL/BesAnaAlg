@@ -54,11 +54,9 @@ typedef HepGeom::Point3D<double> HepPoint3D;
 #include <vector>
 #include <set>
 const double mpion=0.13957018; //pi+-
-//const double mkaon=0.493677; //k+-
 const double mpi0=0.1349766;
 const double meta=0.547853;
 const double mep=0.95778;
-//const double mphi=1.019455;
 const double mk0=0.497611; //ks&kl
 const double melectron=0.000510999;
 typedef std::vector<int> Vint;
@@ -83,36 +81,30 @@ StatusCode JpsiToKsKlEtaAlg::initialize(){
 		if ( m_tuple1 )    {
 			status = m_tuple1->addItem ("run",   m_runNo);
 			status = m_tuple1->addItem ("evt",   m_evtNo);
-			status = m_tuple1->addItem ("no_pip",    m_no_pip,0,20);
-			status = m_tuple1->addIndexedItem ("p4_pip", m_no_pip, 4, m_p4_pip);
-			status = m_tuple1->addIndexedItem ("pip_id", m_no_pip, m_pip_id);
-			status = m_tuple1->addItem ("no_pim",    m_no_pim,0,20);
-			status = m_tuple1->addIndexedItem ("p4_pim", m_no_pim, 4, m_p4_pim);
-			status = m_tuple1->addIndexedItem ("pim_id", m_no_pim, m_pim_id);
-			//status = m_tuple1->addItem ("no_kap",    m_no_kap,0,20);
-			//status = m_tuple1->addIndexedItem ("p4_kap", m_no_kap, 4, m_p4_kap);
-			//status = m_tuple1->addIndexedItem ("kap_id", m_no_kap, m_kap_id);
-			//status = m_tuple1->addItem ("no_kam",    m_no_kam,0,20);
-			//status = m_tuple1->addIndexedItem ("p4_kam", m_no_kam, 4, m_p4_kam);
-			//status = m_tuple1->addIndexedItem ("kam_id", m_no_kam, m_kam_id);
+			//status = m_tuple1->addItem ("no_pip",    m_no_pip,0,20);
+			//status = m_tuple1->addIndexedItem ("p4_pip", m_no_pip, 4, m_p4_pip);
+			//status = m_tuple1->addIndexedItem ("pip_id", m_no_pip, m_pip_id);
+			//status = m_tuple1->addItem ("no_pim",    m_no_pim,0,20);
+			//status = m_tuple1->addIndexedItem ("p4_pim", m_no_pim, 4, m_p4_pim);
+			//status = m_tuple1->addIndexedItem ("pim_id", m_no_pim, m_pim_id);
 			status = m_tuple1->addItem ("no_gam",  m_no_gam,0,50);
 			status = m_tuple1->addIndexedItem ("gam_par", m_no_gam, 6,  m_gam_par);
-			status = m_tuple1->addItem ("no_pi0", m_no_pi0, 0,50);
-			status = m_tuple1->addIndexedItem ("pi0_par",  m_no_pi0, 8, m_pi0_par);
+			//status = m_tuple1->addItem ("no_pi0", m_no_pi0, 0,50);
+			//status = m_tuple1->addIndexedItem ("pi0_par",  m_no_pi0, 8, m_pi0_par);
 			status = m_tuple1->addItem ("no_eta", m_no_eta, 0,50);
 			status = m_tuple1->addIndexedItem ("eta_par",  m_no_eta, 8, m_eta_par);
-			status = m_tuple1->addItem ("no_chrp",   m_no_chrp,0,20);
-			status = m_tuple1->addIndexedItem ("chrp_p3",  m_no_chrp, 3, m_chrp_p3);
-			status = m_tuple1->addIndexedItem ("chrp_id",  m_no_chrp, m_chrp_id);
-			status = m_tuple1->addIndexedItem ("chrp_Eemc",  m_no_chrp, m_chrp_Eemc);
-			status = m_tuple1->addIndexedItem ("chrp_prob",  m_no_chrp, 25,m_chrp_prob);
-			status = m_tuple1->addItem ("no_chrm",   m_no_chrm,0,20);
-			status = m_tuple1->addIndexedItem ("chrm_p3",  m_no_chrm, 3, m_chrm_p3);
-			status = m_tuple1->addIndexedItem ("chrm_id",  m_no_chrm, m_chrm_id);
-			status = m_tuple1->addIndexedItem ("chrm_Eemc",  m_no_chrm, m_chrm_Eemc);
-			status = m_tuple1->addIndexedItem ("chrm_prob",  m_no_chrm, 25,m_chrm_prob);
-			status = m_tuple1->addItem ("no_etaTOpipipi0", m_no_etaTOpipipi0,0,50);
-			status = m_tuple1->addIndexedItem ("M_etaTOpipipi0", m_no_etaTOpipipi0, m_M_etaTOpipipi0);
+			//status = m_tuple1->addItem ("no_chrp",   m_no_chrp,0,20);
+			//status = m_tuple1->addIndexedItem ("chrp_p3",  m_no_chrp, 3, m_chrp_p3);
+			//status = m_tuple1->addIndexedItem ("chrp_id",  m_no_chrp, m_chrp_id);
+			//status = m_tuple1->addIndexedItem ("chrp_Eemc",  m_no_chrp, m_chrp_Eemc);
+			//status = m_tuple1->addIndexedItem ("chrp_prob",  m_no_chrp, 25,m_chrp_prob);
+			//status = m_tuple1->addItem ("no_chrm",   m_no_chrm,0,20);
+			//status = m_tuple1->addIndexedItem ("chrm_p3",  m_no_chrm, 3, m_chrm_p3);
+			//status = m_tuple1->addIndexedItem ("chrm_id",  m_no_chrm, m_chrm_id);
+			//status = m_tuple1->addIndexedItem ("chrm_Eemc",  m_no_chrm, m_chrm_Eemc);
+			//status = m_tuple1->addIndexedItem ("chrm_prob",  m_no_chrm, 25,m_chrm_prob);
+			//status = m_tuple1->addItem ("no_etaTOpipipi0", m_no_etaTOpipipi0,0,50);
+			//status = m_tuple1->addIndexedItem ("M_etaTOpipipi0", m_no_etaTOpipipi0, m_M_etaTOpipipi0);
 			status = m_tuple1->addIndexedItem ("pipFeta_id", m_no_etaTOpipipi0, m_pipFeta_id);
 			status = m_tuple1->addIndexedItem ("pimFeta_id", m_no_etaTOpipipi0, m_pimFeta_id);
 			status = m_tuple1->addIndexedItem ("pi0Feta_id", m_no_etaTOpipipi0, m_pi0Feta_id);
@@ -134,27 +126,72 @@ StatusCode JpsiToKsKlEtaAlg::initialize(){
 			status = m_tuple1->addIndexedItem("p4_gam1Fpi03Feta_kf",m_no_etaTO3pi0,4,m_p4_gam1Fpi03Feta_kf);
 			status = m_tuple1->addIndexedItem("p4_gam2Fpi03Feta_kf",m_no_etaTO3pi0,4,m_p4_gam2Fpi03Feta_kf);
 			//status = m_tuple1->addItem ("no_phiTOkk", m_no_phiTOkk,0,100);
-			status = m_tuple1->addItem("no_ksTOpipi", m_no_ksTOpipi,0,100);
+			//status = m_tuple1->addItem("no_ksTOpipi", m_no_ksTOpipi,0,100);
 			//status = m_tuple1->addIndexedItem("chis_phiTOkk",m_no_phiTOkk,m_chis_phiTOkk);
-			status = m_tuple1->addIndexedItem("chis_ksTOpipi", m_no_ksTOpipi, m_chis_ksTOpipi);
+			//status = m_tuple1->addIndexedItem("chis_ksTOpipi", m_no_ksTOpipi, m_chis_ksTOpipi);
 			//status = m_tuple1->addIndexedItem ("p4_kapFphi_kf", m_no_phiTOkk,4, m_p4_kapFphi_kf);
-			status = m_tuple1->addIndexedItem("p4_pipFks_kf", m_no_ksTOpipi,4, m_p4_pipFks_kf);
+			//status = m_tuple1->addIndexedItem("p4_pipFks_kf", m_no_ksTOpipi,4, m_p4_pipFks_kf);
 			//status = m_tuple1->addIndexedItem ("p4_kamFphi_kf", m_no_phiTOkk,4, m_p4_kamFphi_kf);
-            status = m_tuple1->addIndexedItem("p4_pimFks_kf", m_no_ksTOpipi,4, m_p4_pimFks_kf);			
+            //status = m_tuple1->addIndexedItem("p4_pimFks_kf", m_no_ksTOpipi,4, m_p4_pimFks_kf);			
 			//status = m_tuple1->addIndexedItem ("M_phiTOkk", m_no_phiTOkk, m_M_phiTOkk);
-			status = m_tuple1->addIndexedItem("M_ksTOpipi", m_no_ksTOpipi, m_M_ksTOpipi);
+			//status = m_tuple1->addIndexedItem("M_ksTOpipi", m_no_ksTOpipi, m_M_ksTOpipi);
 			//status = m_tuple1->addIndexedItem ("rconv", m_no_phiTOkk, m_rconv);
-		    status = m_tuple1->addIndexedItem("rconv", m_no_ksTOpipi, m_rconv);
+		    //status = m_tuple1->addIndexedItem("rconv", m_no_ksTOpipi, m_rconv);
 			//status = m_tuple1->addIndexedItem ("kapFphi_id", m_no_phiTOkk, m_kapFphi_id);
-			status = m_tuple1->addIndexedItem("pipFks_id", m_no_ksTOpipi, m_pipFks_id);
+			//status = m_tuple1->addIndexedItem("pipFks_id", m_no_ksTOpipi, m_pipFks_id);
 			//status = m_tuple1->addIndexedItem ("kamFphi_id", m_no_phiTOkk, m_kamFphi_id);
-            status = m_tuple1->addIndexedItem("pimFks_id", m_no_ksTOpipi, m_pimFks_id);
+            //status = m_tuple1->addIndexedItem("pimFks_id", m_no_ksTOpipi, m_pimFks_id);
 			//status = m_tuple1->addIndexedItem ("cos_ee", m_no_phiTOkk, m_cos_ee);
-    		status = m_tuple1->addIndexedItem("cos_ee", m_no_ksTOpipi, m_cos_ee);
+    		//status = m_tuple1->addIndexedItem("cos_ee", m_no_ksTOpipi, m_cos_ee);
 
 			status = m_tuple1->addItem("indexmc", m_idxmc, 0, 100);
 			status = m_tuple1->addIndexedItem("pdgid" , m_idxmc, m_pdgid);
 			status = m_tuple1->addIndexedItem("motheridx", m_idxmc, m_motheridx);
+
+			//pip, pim from ks0
+			status = m_tuple1->addItem(         "npip",         m_npip,         0,      100);
+            status = m_tuple1->addIndexedItem(  "idpip",        m_npip,         m_idpip);
+            status = m_tuple1->addIndexedItem(  "mpip",         m_npip,         m_mpip);
+            status = m_tuple1->addIndexedItem(  "pxpip",        m_npip,         m_pxpip);
+            status = m_tuple1->addIndexedItem(  "pypip",        m_npip,         m_pypip);
+            status = m_tuple1->addIndexedItem(  "pzpip",        m_npip,         m_pzpip);
+            status = m_tuple1->addIndexedItem(  "Epip",         m_npip,         m_Epip);
+                        status = m_tuple1->addIndexedItem(      "PipProbK",             m_npip,                 m_PipProbK);
+                        status = m_tuple1->addIndexedItem(      "PipProbPi",            m_npip,                 m_PipProbPi);
+                        status = m_tuple1->addIndexedItem(      "PipProbP",             m_npip,                 m_PipProbP);
+
+            status = m_tuple1->addItem(         "npim",         m_npim,         0,      100);
+            status = m_tuple1->addIndexedItem(  "idpim",        m_npim,         m_idpim);
+            status = m_tuple1->addIndexedItem(  "mpim",         m_npim,         m_mpim);
+            status = m_tuple1->addIndexedItem(  "pxpim",        m_npim,         m_pxpim);
+            status = m_tuple1->addIndexedItem(  "pypim",        m_npim,         m_pypim);
+            status = m_tuple1->addIndexedItem(  "pzpim",        m_npim,         m_pzpim);
+            status = m_tuple1->addIndexedItem(  "Epim",         m_npim,         m_Epim);
+                        status = m_tuple1->addIndexedItem(      "PimProbK",             m_npim,                 m_PimProbK);
+                        status = m_tuple1->addIndexedItem(      "PimProbPi",            m_npim,                 m_PimProbPi);
+                        status = m_tuple1->addIndexedItem(      "PimProbP",             m_npim,                 m_PimProbP);
+
+            status = m_tuple1->addItem(         "nKS0",         m_nKS0, 0, 100);
+            status = m_tuple1->addIndexedItem(  "pxKS0",        m_nKS0,         m_pxKS0);
+            status = m_tuple1->addIndexedItem(  "pyKS0",        m_nKS0,         m_pyKS0);
+            status = m_tuple1->addIndexedItem(  "pzKS0",        m_nKS0,         m_pzKS0);
+            status = m_tuple1->addIndexedItem(  "EKS0",         m_nKS0,         m_EKS0);
+            status = m_tuple1->addIndexedItem(  "mKS0",         m_nKS0,         m_mKS0);
+            status = m_tuple1->addIndexedItem(  "chi2KS0IP",    m_nKS0,         m_chi2KS0IP);
+            status = m_tuple1->addIndexedItem(  "chi2KS0SP",    m_nKS0,         m_chi2KS0SP);
+            status = m_tuple1->addIndexedItem(  "LifeKS0",      m_nKS0,         m_LifeKS0);
+            status = m_tuple1->addIndexedItem(  "LenKS0",       m_nKS0,         m_LenKS0);
+            status = m_tuple1->addIndexedItem(  "LenErrKS0",    m_nKS0,         m_LenErrKS0);
+            status = m_tuple1->addIndexedItem(  "IdTrp",        m_nKS0,         m_IdTrp);
+            status = m_tuple1->addIndexedItem(  "pxTrp",        m_nKS0,         m_pxTrp);
+            status = m_tuple1->addIndexedItem(  "pyTrp",        m_nKS0,         m_pyTrp);
+            status = m_tuple1->addIndexedItem(  "pzTrp",        m_nKS0,         m_pzTrp);
+            status = m_tuple1->addIndexedItem(  "ETrp",         m_nKS0,         m_ETrp);
+            status = m_tuple1->addIndexedItem(  "IdTrm",        m_nKS0,         m_IdTrm);
+            status = m_tuple1->addIndexedItem(  "pxTrm",        m_nKS0,         m_pxTrm);
+            status = m_tuple1->addIndexedItem(  "pyTrm",        m_nKS0,         m_pyTrm);
+            status = m_tuple1->addIndexedItem(  "pzTrm",        m_nKS0,         m_pzTrm);
+            status = m_tuple1->addIndexedItem(  "ETrm",         m_nKS0,         m_ETrm);
 
 		}
 		else    {
@@ -228,6 +265,112 @@ StatusCode JpsiToKsKlEtaAlg::execute(){
 		<< evtRecEvent->totalTracks() <<endreq;
 
 	SmartDataPtr<EvtRecTrackCol> evtRecTrkCol(eventSvc(),  EventModel::EvtRec::EvtRecTrackCol);
+
+	Vint pipID; pipID.clear();
+	Vint pimID; pimID.clear();
+	//Vint kapID; kapID.clear();
+	//Vint kamID; kamID.clear();
+	Vint chrpID; chrpID.clear();
+	Vint chrmID; chrmID.clear();
+	for(int i=0; i<evtRecEvent->totalCharged(); i++){
+		EvtRecTrackIterator itTrk=evtRecTrkCol->begin() + i;
+		bool bool_tp=goodTrk(itTrk); //select good trks:vr\vz\cos-theta
+		if(m_debug) cout<<i<<" bool_tp="<<bool_tp<<endl;
+		if(!bool_tp) continue;
+
+		//distinguish chr+ chr-
+		RecMdcTrack* mdcTrk = (*itTrk)->mdcTrack();
+		int chr = mdcTrk->charge();
+		if(m_debug) cout<<i<<" chr="<<chr<<endl;
+		if(chr>0)  chrpID.push_back(i);
+		else  chrmID.push_back(i);
+
+		//PID
+		ISimplePIDSvc*  m_simplePIDSvc;
+		Gaudi::svcLocator()->service("SimplePIDSvc", m_simplePIDSvc);
+		m_simplePIDSvc->preparePID(*itTrk);
+		bool pion_pid= m_simplePIDSvc->ispion();
+		double prob[25];
+
+		PID(itTrk,prob);
+		if (prob[2] > prob[3] && prob[2] > prob[4] && prob[3] > 0.001) bool pion_pid = 1;
+
+		//bool kaon_pid= m_simplePIDSvc->iskaon();
+		if(pion_pid) {
+			if(chr>0) pipID.push_back(i);
+			else pimID.push_back(i); 
+		} 
+		//else if(kaon_pid){
+		//	if(chr>0) kapID.push_back(i);
+		//	else kamID.push_back(i);
+		//}
+	}
+	if(m_debug){
+		cout<<"totaltrk: no_chrp="<<chrpID.size()<<"; no_chrm="<<chrmID.size()<<endl;
+		cout<<"   pions: no_pip="<<pipID.size()<<"; no_pim="<<pimID.size()<<endl;
+		//cout<<"   kaons: no_kap="<<kapID.size()<<"; no_kam="<<kamID.size()<<endl;
+	}  
+
+	int no_chrp=chrpID.size();
+	int no_chrm=chrmID.size();
+	if(no_chrp>20||no_chrm>20) return StatusCode::SUCCESS;
+	int no_pip=pipID.size();
+	int no_pim=pimID.size();
+	//int no_kap=kapID.size();
+	//int no_kam=kamID.size();
+
+	m_runNo = runNo;
+	m_evtNo= eventNo;
+
+	m_no_chrp=no_chrp;  m_no_chrm=no_chrm;
+	m_no_pip=no_pip;  m_no_pim=no_pim;
+	//m_no_kap=no_kap;  m_no_kam=no_kam;
+
+	//***save information for K+K-
+	/*
+	for(int i=0;i<no_kap;i++){
+		int kap_id=kapID[i];
+		if(m_debug) cout<<"kap_id="<<kap_id<<endl;
+		RecMdcKalTrack::setPidType(RecMdcKalTrack::kaon);
+		EvtRecTrackIterator itTrk_kap=evtRecTrkCol->begin() + kap_id;
+		RecMdcKalTrack* mdcKalTrk_kap = (*itTrk_kap)->mdcKalTrack();
+		HepLorentzVector p4_kap_tp=mdcKalTrk_kap->p4(mkaon);
+		for(int bb=0;bb<4;bb++) { m_p4_kap[i][bb]=p4_kap_tp[bb];}
+		m_kap_id[i]=kap_id;
+	}   
+	for(int i=0;i<no_kam;i++){
+		int kam_id=kamID[i];
+		if(m_debug) cout<<"kam_id="<<kam_id<<endl;
+		RecMdcKalTrack::setPidType(RecMdcKalTrack::kaon);
+		EvtRecTrackIterator itTrk_kam=evtRecTrkCol->begin() + kam_id;
+		RecMdcKalTrack* mdcKalTrk_kam = (*itTrk_kam)->mdcKalTrack();
+		HepLorentzVector p4_kam_tp=mdcKalTrk_kam->p4(mkaon);
+		for(int bb=0;bb<4;bb++) {m_p4_kam[i][bb]=p4_kam_tp[bb];}
+		m_kam_id[i]=kam_id;
+	}
+	*/
+
+	//*****save information for pi+pi-
+	for(int i=0;i<no_pip;i++){
+		int pip_id=pipID[i];
+		if(m_debug) cout<<"pip_id="<<pip_id<<endl;
+		RecMdcKalTrack::setPidType(RecMdcKalTrack::pion);
+		EvtRecTrackIterator itTrk_pip=evtRecTrkCol->begin() + pip_id;
+		RecMdcKalTrack* mdcKalTrk_pip = (*itTrk_pip)->mdcKalTrack();
+		HepLorentzVector p4_pip_tp=mdcKalTrk_pip->p4(mpion);
+		for(int bb=0;bb<4;bb++)  {m_p4_pip[i][bb]=p4_pip_tp[bb];}
+		m_pip_id[i]=pip_id;
+	}
+	for(int i=0;i<no_pim;i++){
+		int pim_id=pimID[i];
+		if(m_debug) cout<<"pim_id="<<pim_id<<endl;
+		RecMdcKalTrack::setPidType(RecMdcKalTrack::pion);
+		EvtRecTrackIterator itTrk_pim=evtRecTrkCol->begin() + pim_id;
+		RecMdcKalTrack* mdcKalTrk_pim = (*itTrk_pim)->mdcKalTrack();
+		HepLorentzVector p4_pim_tp=mdcKalTrk_pim->p4(mpion);
+		for(int bb=0;bb<4;bb++)  {m_p4_pim[i][bb]=p4_pim_tp[bb];}
+		m_pim_id[i]=pim_id;
+	}
 
 	//good showers
 	Vint goodGam; goodGam.clear();
@@ -491,6 +634,9 @@ StatusCode JpsiToKsKlEtaAlg::execute(){
         m_pzTrm[i] = P4Trm[i][2];
         m_ETrm[i] = P4Trm[i][3];
     }
+
+    m_tuple1->write();
+    return StatusCode::SUCCESS;
 
 }//end of execute()
 //**************************************************************
