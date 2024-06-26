@@ -1,4 +1,4 @@
-#include "SampleAlg/JpsiToKsKlEtaAlg.h"
+#include "RevisedSampleAlg/JpsiToKsKlEtaAlg.h"
 
 #include "GaudiKernel/MsgStream.h"
 #include "GaudiKernel/AlgFactory.h"
@@ -234,7 +234,7 @@ StatusCode JpsiToKsKlEtaAlg::execute(){
 	SmartDataPtr<Event::McParticleCol> mcParticleCol(eventSvc(),"/Event/MC/McParticleCol");
 	if(mcParticleCol){
 		Event::McParticleCol::iterator iter_mc=mcParticleCol->begin();
-		m_idxmc=0;
+		m_idxmc=8;
 		const int incPid=443; //443 is the PDG code of J/psi
 		bool incPdcy(false);
 		int rootIndex(-1);
@@ -351,6 +351,7 @@ StatusCode JpsiToKsKlEtaAlg::execute(){
 	*/
 
 	//*****save information for pi+pi-
+	/*
 	for(int i=0;i<no_pip;i++){
 		int pip_id=pipID[i];
 		if(m_debug) cout<<"pip_id="<<pip_id<<endl;
@@ -371,6 +372,7 @@ StatusCode JpsiToKsKlEtaAlg::execute(){
 		for(int bb=0;bb<4;bb++)  {m_p4_pim[i][bb]=p4_pim_tp[bb];}
 		m_pim_id[i]=pim_id;
 	}
+	*/
 
 	//good showers
 	Vint goodGam; goodGam.clear();

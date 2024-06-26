@@ -1,6 +1,6 @@
 #include "$EVENTWRITERROOT/share/jobOptions_EventWriter.txt"
-ApplicationMgr.DLLs += {"SampleAlg"};
-ApplicationMgr.TopAlg +={ "JpsiToPhiEtaAlg" };
+ApplicationMgr.DLLs += {"RevisedSampleAlg"};
+ApplicationMgr.TopAlg +={ "JpsiToKsKlEtaAlg" };
 
 #include "$VERTEXFITROOT/share/jobOptions_VertexDbSvc.txt"
-JpsiToPhiEtaAlg.Debug = 0;
+JpsiToKsKlEtaAlg.Debug = 0;

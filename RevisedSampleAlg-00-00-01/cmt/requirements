@@ -1,6 +1,6 @@
-package SampleAlg 
+package RevisedSampleAlg 
 
-branches cmt src SampleAlg share
+branches cmt src RevisedSampleAlg share
 
 use BesAIDA BesAIDA-*    External
 use BesPolicy BesPolicy-01-*
@@ -26,5 +26,5 @@ use GammaConv GammaConv-*  Analysis
 use McTruth   McTruth-*         Event
 use ReconEvent   ReconEvent-*  Event
 apply_pattern component_library
-library SampleAlg *.cxx  components/*.cxx
+library RevisedSampleAlg *.cxx  components/*.cxx
 

@@ -9,10 +9,10 @@ VertexFit * vtxfit = VertexFit::instance();
 KinematicFit * kmfit = KinematicFit::instance();
 SecondVertexFit *ksfit = SecondVertexFit::instance();
 
-DECLARE_ALGORITHM_FACTORY( JpsiToPhiEtaAlg )
+DECLARE_ALGORITHM_FACTORY( JpsiToKsKlEtaAlg )
 
-DECLARE_FACTORY_ENTRIES( SampleAlg ) {
-  DECLARE_ALGORITHM(JpsiToPhiEtaAlg)
+DECLARE_FACTORY_ENTRIES( RevisedSampleAlg ) {
+  DECLARE_ALGORITHM(JpsiToKsKlEtaAlg)
 }
 
 

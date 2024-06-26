@@ -1,4 +1,4 @@
 #include "GaudiKernel/LoadFactoryEntries.h"
 
-LOAD_FACTORY_ENTRIES( SampleAlg )
+LOAD_FACTORY_ENTRIES( RevisedSampleAlg )
 
