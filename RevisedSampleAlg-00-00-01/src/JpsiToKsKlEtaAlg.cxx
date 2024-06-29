@@ -32,6 +32,8 @@
 #include "McTruth/McParticle.h"
 #include "EvTimeEvent/RecEsTime.h"
 #include "MdcRecEvent/RecMdcKalTrack.h"
+#include "VertexFit/SecondVertexFit.h"
+
 using CLHEP::Hep3Vector;
 using CLHEP::Hep2Vector;
 using CLHEP::HepLorentzVector;
@@ -55,12 +57,15 @@ typedef HepGeom::Point3D<double> HepPoint3D;
 #include <set>
 const double mpion=0.13957018; //pi+-
 const double mpi0=0.1349766;
+const double mpi = 0.13957;
 const double meta=0.547853;
 const double mep=0.95778;
 const double mk0=0.497611; //ks&kl
 const double melectron=0.000510999;
 typedef std::vector<int> Vint;
 typedef std::vector<HepLorentzVector> Vp4;
+typedef std::vector<double> Vdb;
+typedef Vdb::iterator VdbIt;
 int no_evt1=0;
 JpsiToKsKlEtaAlg::JpsiToKsKlEtaAlg(const std::string& name, ISvcLocator* pSvcLocator):Algorithm(name,pSvcLocator){
 	declareProperty("Ecms",            m_Ecms=4.260);
@@ -192,6 +197,8 @@ StatusCode JpsiToKsKlEtaAlg::initialize(){
             status = m_tuple1->addIndexedItem(  "pyTrm",        m_nKS0,         m_pyTrm);
             status = m_tuple1->addIndexedItem(  "pzTrm",        m_nKS0,         m_pzTrm);
             status = m_tuple1->addIndexedItem(  "ETrm",         m_nKS0,         m_ETrm);
+
+			declareProperty("m_cosThetacut",   m_cosThetacut = 0.93);
 
 		}
 		else    {
@@ -400,7 +407,7 @@ StatusCode JpsiToKsKlEtaAlg::execute(){
 	//*****eta->gamma gamma
 	if(m_debug) cout<<"#####eta----"<<endl;
 	if(m_debug) cout<<"no_gam="<<no_gam<<endl;
-	ss=-1;
+	int ss=-1;
 	if(m_debug) cout<<"m_no_pi0="<<m_no_pi0<<endl;
 	for(int gg=0;gg<no_gam;gg++){
 		if(m_debug) cout<<"gg="<<gg<<endl;
@@ -468,7 +475,9 @@ StatusCode JpsiToKsKlEtaAlg::execute(){
 
         RecMdcTrack *mdcTrk = (*itTrk)->mdcTrack();
 
-        HepVector a = mdcTrk->helix();
+		Hep3Vector xorigin(0,0,0);
+    
+		HepVector a = mdcTrk->helix();
         HepSymMatrix Ea = mdcTrk->err();
         HepPoint3D point0(0.,0.,0.);
         HepPoint3D IP(xorigin[0],xorigin[1],xorigin[2]);

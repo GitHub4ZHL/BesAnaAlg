@@ -30,6 +30,7 @@ class JpsiToKsKlEtaAlg:public Algorithm {
   private:
     bool	m_debug;
     double      m_Ecms;
+    double m_cosThetacut;
 
     NTuple::Tuple* m_tuple1;                    
     NTuple::Item<int>  m_runNo;
@@ -94,7 +95,7 @@ class JpsiToKsKlEtaAlg:public Algorithm {
     //NTuple::Matrix<double> m_p4_kamFphi_kf;
 	NTuple::Matrix<double> m_p4_pimFks_kf;
     //NTuple::Array<double> m_M_phiTOkk;
-	NTuple::Array<doubke> m_M_ksTOpipi;
+	NTuple::Array<double> m_M_ksTOpipi;
     NTuple::Array<double> m_rconv;
     //NTuple::Array<int> m_kapFphi_id;
 	NTuple::Array<double> m_pipFks_id;
@@ -106,5 +107,51 @@ class JpsiToKsKlEtaAlg:public Algorithm {
     NTuple::Item<int>  m_idxmc;
     NTuple::Array<int>  m_pdgid;
     NTuple::Array<int>  m_motheridx;
+
+    NTuple::Item<int>  m_npip;
+    NTuple::Array<int> m_idpip;
+    NTuple::Array<double> m_mpip;
+    NTuple::Array<double> m_pxpip;
+    NTuple::Array<double> m_pypip;
+    NTuple::Array<double> m_pzpip;
+    NTuple::Array<double> m_Epip;
+    NTuple::Array<double> m_PipProbK;
+    NTuple::Array<double> m_PipProbPi;
+    NTuple::Array<double> m_PipProbP;
+
+    NTuple::Item<int>  m_npim;
+    NTuple::Array<int> m_idpim;
+    NTuple::Array<double> m_mpim;
+    NTuple::Array<double> m_pxpim;
+    NTuple::Array<double> m_pypim;
+    NTuple::Array<double> m_pzpim;
+    NTuple::Array<double> m_Epim;
+    NTuple::Array<double> m_PimProbK;
+    NTuple::Array<double> m_PimProbPi;
+    NTuple::Array<double> m_PimProbP;
+
+    NTuple::Item<long> m_nKS0;
+    NTuple::Array<double> m_mKS0;
+    NTuple::Array<double> m_pxKS0;
+    NTuple::Array<double> m_pyKS0;
+    NTuple::Array<double> m_pzKS0;
+    NTuple::Array<double> m_EKS0;
+    NTuple::Array<double> m_chi2KS0IP;
+    NTuple::Array<double> m_chi2KS0SP;
+    NTuple::Array<double> m_LifeKS0;
+    NTuple::Array<double> m_LenKS0;
+    NTuple::Array<double> m_LenErrKS0;
+
+	NTuple::Array<int> m_IdTrp;
+    NTuple::Array<double> m_pxTrp;
+    NTuple::Array<double> m_pyTrp;
+    NTuple::Array<double> m_pzTrp;
+    NTuple::Array<double> m_ETrp;
+
+    NTuple::Array<int> m_IdTrm;
+    NTuple::Array<double> m_pxTrm;
+    NTuple::Array<double> m_pyTrm;
+    NTuple::Array<double> m_pzTrm;
+    NTuple::Array<double> m_ETrm;
 };
 #endif//JpsiToKsKlEtaAlg_Header

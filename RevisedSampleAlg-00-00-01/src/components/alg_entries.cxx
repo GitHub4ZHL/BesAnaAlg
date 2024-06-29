@@ -1,5 +1,5 @@
 #include "GaudiKernel/DeclareFactoryEntries.h"
-#include "SampleAlg/JpsiToPhiEtaAlg.h"
+#include "RevisedSampleAlg/JpsiToKsKlEtaAlg.h"
 
 #include "VertexFit/KinematicFit.h"
 #include "VertexFit/VertexFit.h"
